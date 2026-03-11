@@ -5,7 +5,7 @@ A modern To-Do List application built with React and Material UI that allows use
 🔗 Live Demo
 
 Check out the live version of the React To-Do App here:
-React To-Do App on Netlify
+https://todoappaiim003.netlify.app/
 🌐
 
 ✨ Features
