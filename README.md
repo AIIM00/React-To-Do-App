@@ -2,6 +2,12 @@ React To-Do App
 
 A modern To-Do List application built with React and Material UI that allows users to manage daily tasks efficiently with filtering, editing, and persistent storage.
 
+🔗 Live Demo
+
+Check out the live version of the React To-Do App here:
+React To-Do App on Netlify
+🌐
+
 ✨ Features
 
 . Add new tasks
