@@ -44,7 +44,22 @@ https://todoappaiim003.netlify.app/
 
 📁 Project Structure
 
-src │ ├── components │ ├── ToDoList.jsx │ ├── ToDo.jsx │ ├── Header.jsx │ ├── ToggleBtn.jsx │ └── ToastCard.jsx │ ├── contexts │ └── TaskContext.js │ ├── assets │ └── Theme.jsx │ └── App.jsx
+src
+│
+├── components
+│ ├── ToDoList.jsx
+│ ├── ToDo.jsx
+│ ├── Header.jsx
+│ ├── ToggleBtn.jsx
+│ └── ToastCard.jsx
+│
+├── contexts
+│ └── TaskContext.js
+│
+├── assets
+│ └── Theme.jsx
+│
+└── App.jsx
 
 🚀 Installation
 
