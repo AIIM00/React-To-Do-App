@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'Clash Display';
+    src: url('./assets/fonts/ClashDisplay-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Clash Display';
+    src: url('./assets/fonts/ClashDisplay-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Satoshi';
+    src: url('./assets/fonts/Satoshi-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
