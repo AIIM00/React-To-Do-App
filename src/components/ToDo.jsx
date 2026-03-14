@@ -85,7 +85,7 @@ export default function ToDo({ id,title, details, onAction, done }) {
           <Stack direction="row" spacing={1}>
 
             {/* Mark Task as Done */}
-            {!done && (<IconButton
+            {!done?<IconButton
               onClick={() => {
                 onAction(id, 'done');}}
               aria-label="mark task as done"
@@ -99,8 +99,8 @@ export default function ToDo({ id,title, details, onAction, done }) {
               }}
             >
               <CheckIcon fontSize="medium" />
-            </IconButton>)}
-            {done && (<IconButton
+            </IconButton>
+            : <IconButton
               onClick={() => {
                 onAction(id, 'undo');}}
               aria-label="mark task as pending"
@@ -114,7 +114,7 @@ export default function ToDo({ id,title, details, onAction, done }) {
               }}
             >
               <RestoreIcon fontSize="medium" />
-            </IconButton>)}
+            </IconButton>}
 
 
             {/* Edit Task */}

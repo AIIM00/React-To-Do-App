@@ -7,6 +7,7 @@ import Header from './Header';
 import ToDo from './ToDo';
 import ToastCard from './ToastCard';
 import AddTaskCard from './AddTaskCard';
+import Box from '@mui/material/Box';
 
 
 import { v4 as uuidv4 } from 'uuid';
@@ -191,7 +192,6 @@ useEffect(()=>{
       <Container 
       style={{
         backgroundColor: '#f5f5f5',
-        padding: '2rem',
         borderRadius: '2rem',
         display: 'flex',
         flexDirection: 'column',
@@ -199,20 +199,11 @@ useEffect(()=>{
         
       }}
       >
+      <AddTaskCard addTask={addTask} />
+
         {/* Page Header */}
-        <Stack
-      direction="row"
-      sx={{
-        marginTop: '1rem',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}
-    >
+        
       <Header />
-        <AddTaskCard addTask={addTask} />
-    </Stack>
         {/* Render all task cards */}
         <SimpleSwiper slides = {taskCard}/>         
         {/* Add Task Section */}
@@ -239,8 +230,8 @@ function SimpleSwiper({slides}) {
   return (
     <Swiper
   direction="vertical"
-  slidesPerView={3}
-  spaceBetween={10}
+  slidesPerView={'auto'}
+  spaceBetween={20}
   mousewheel={true}
   modules={[Navigation, Pagination, Mousewheel]}
   pagination={{ clickable: true }}
@@ -248,11 +239,16 @@ function SimpleSwiper({slides}) {
     nextEl: ".swiper-button-next-custom",
     prevEl: ".swiper-button-prev-custom",
   }}
-  style={{ marginTop:'1rem',padding:'5rem 2rem', height:'500px',position: "relative" }}
+  style={{
+    marginTop:'1rem',
+    padding:'4rem 0',
+    width:'22rem',
+    height:'28rem'
+  }}
 >
   {slides.map((slide, index) => (
-        <SwiperSlide key={index}>
-          {slide}
+        <SwiperSlide key={index} style={{ height: "auto" }} >
+            {slide}
         </SwiperSlide>
       ))}
 

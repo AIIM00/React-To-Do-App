@@ -39,16 +39,19 @@ export default function AddTaskCard({addTask}) {
     <React.Fragment>
       <IconButton
                     onClick={() => {
-                        handleClickOpen();
-                      console.log('Adding New Task.');}}
+                        handleClickOpen()}}
                     aria-label="add new task"
-                    size="large"
                     sx={{ 
                         color: 'primary.main' ,
                         backgroundColor: 'primary.light',
                         '&:hover': {
                             bgcolor: 'primary.dark',
                           },
+                          position:'relative',
+                          left:'85%',
+                          top:'4rem',
+                          width:'3rem',
+                          height:'3rem'
 
                     }}
                   >
