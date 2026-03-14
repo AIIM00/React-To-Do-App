@@ -5,7 +5,7 @@ import theme from "./assets/theme";
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <ToDoList />
+      <ToDoList/>
     </ThemeProvider>
   )
 }

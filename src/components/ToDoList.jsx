@@ -241,7 +241,7 @@ function SimpleSwiper({slides}) {
   }}
   style={{
     marginTop:'1rem',
-    padding:'4rem 0',
+    padding:'4rem',
     width:'22rem',
     height:'28rem'
   }}
