@@ -7,7 +7,7 @@ import Header from './Header';
 import ToDo from './ToDo';
 import ToastCard from './ToastCard';
 import AddTaskCard from './AddTaskCard';
-import Box from '@mui/material/Box';
+
 
 
 import { v4 as uuidv4 } from 'uuid';
@@ -29,10 +29,6 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-//Icons
-import { IconButton } from '@mui/material';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // =====================================================
 // MAIN COMPONENT : ToDoList
 // Holds the tasks state and handles task actions
@@ -217,16 +213,6 @@ useEffect(()=>{
 
 //Simple Swiper Component
 function SimpleSwiper({slides}) {
-  const arrowBtnStyle = {
-    position: 'absolute',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    zIndex: '10',
-    cursor: 'pointer',
-    fontSize: '2rem',
-    color: '#000',
-    userSelect: 'none',
-  };
   return (
     <Swiper
   direction="vertical"
@@ -234,16 +220,12 @@ function SimpleSwiper({slides}) {
   spaceBetween={20}
   mousewheel={true}
   modules={[Navigation, Pagination, Mousewheel]}
-  pagination={{ clickable: true }}
-  navigation={{
-    nextEl: ".swiper-button-next-custom",
-    prevEl: ".swiper-button-prev-custom",
-  }}
+  pagination={{ clickable: true,
+   }}
   style={{
     marginTop:'1rem',
-    padding:'4rem',
-    width:'22rem',
-    height:'28rem'
+    height:'28rem',
+    padding:'2rem',
   }}
 >
   {slides.map((slide, index) => (
@@ -251,40 +233,6 @@ function SimpleSwiper({slides}) {
             {slide}
         </SwiperSlide>
       ))}
-
-  {/* Custom arrows */}
-  <IconButton
-                    className='swiper-button-prev-custom'
-                    aria-label="add new task"
-                    size="large"
-                    sx={{ ...arrowBtnStyle,
-                        top: 0,
-                        color: 'primary.main' ,
-                        backgroundColor: 'primary.light',
-                        '&:hover': {
-                            bgcolor: 'primary.dark',
-                          },
-
-                    }}
-                  >
-                    <ExpandLessIcon fontSize="large" />
-                  </IconButton>
-                  <IconButton
-                    className='swiper-button-next-custom'
-                    aria-label="add new task"
-                    size="large"
-                    sx={{ ...arrowBtnStyle,
-                        bottom: 0,
-                        color: 'primary.main' ,
-                        backgroundColor: 'primary.light',
-                        '&:hover': {
-                            bgcolor: 'primary.dark',
-                          },
-
-                    }}
-                  >
-                    <ExpandMoreIcon fontSize="large" />
-                  </IconButton>
 </Swiper>
   );
 }
