@@ -23,6 +23,7 @@ export default function Header() {
         <Divider variant='h3' sx={{fontWeight:'bold'}} />
       </CardContent>
       <ToggleButtons />
+      
 
     </Card>
   );

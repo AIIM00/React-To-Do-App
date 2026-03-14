@@ -46,7 +46,7 @@ export default function ToastCard({ toastType, clearToast }) {
   return (
     <Snackbar
       open={open}
-      autoHideDuration={6000}
+      autoHideDuration={4000}
       onClose={handleClose}
       message={messages[toastType]}
       action={action}

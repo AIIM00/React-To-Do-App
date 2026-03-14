@@ -3,19 +3,35 @@
 // -----------------------------
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-
 import Header from './Header';
 import ToDo from './ToDo';
 import ToastCard from './ToastCard';
+import AddTaskCard from './AddTaskCard';
+
 
 import { v4 as uuidv4 } from 'uuid';
 import { useState, useEffect} from 'react';
+
+//USE CONTEXT
 import { TaskContext } from "../contexts/TaskContext";
 
-import theme from '../assets/theme';
+
+//import theme from '../assets/theme';
+
+// -----------------------------
+//Imports For Swiper
+// -----------------------------
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Mousewheel } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+//Icons
+import { IconButton } from '@mui/material';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // =====================================================
 // MAIN COMPONENT : ToDoList
 // Holds the tasks state and handles task actions
@@ -66,15 +82,6 @@ useEffect(()=>{
 },[taskArr])
 
   // ---------------------------------------------------
-  // State: input value for new task
-  // ---------------------------------------------------
-  const [newTask, setNewTask] = useState({
-      title: '',
-      details: '',
-  });
-
-
-  // ---------------------------------------------------
   // State: type of toast notification to show (for future use with Snackbar)
   const [toastType, setToastType] = useState("");
 
@@ -88,6 +95,7 @@ useEffect(()=>{
   if (filter === "undone") return !task.done;
   return true; // all
 });
+
 
 // ---------------------------------------------------
 
@@ -140,14 +148,12 @@ useEffect(()=>{
   // Adds a new task to the task list
   // Prevents adding empty tasks
   // ---------------------------------------------------
-  function addTask() {
-    
-
-    if (!newTask.title.trim()) return;
+  function addTask(task) {
+    if (!task.title.trim()) return;
     const newToDo = {
         id: uuidv4(),
-        title: newTask.title,
-        details: newTask.details,
+        title: task.title,
+        details: task.details,
         done: false,
       }
     const updatedToDo = [
@@ -155,9 +161,6 @@ useEffect(()=>{
       ,
     ] 
     setTasks(updatedToDo);
-
-    // clear input field after adding task
-    setNewTask({title:'', details:''});
   }
 
 
@@ -165,7 +168,7 @@ useEffect(()=>{
   // Create ToDo components from the task array
   // ---------------------------------------------------
   const taskCard = filteredTasks.map((task) => (
-    <ToDo
+      <ToDo
       key={task.id}
       id={task.id}
       title={task.title}
@@ -173,7 +176,11 @@ useEffect(()=>{
       done={task.done}
       onAction={handleTaskAction}
     />
+    
   ));
+
+  
+ 
 
 
   // ---------------------------------------------------
@@ -193,68 +200,7 @@ useEffect(()=>{
       }}
       >
         {/* Page Header */}
-        <Header />
-        {/* Render all task cards */}
-        <Box
-        sx={{
-          display:'flex',
-          flexDirection:'column',
-          gap:'0.5rem',
-        }}>
-          {taskCard}
-        </Box>
-        
-        {/* Add Task Section */}
-        <AddTask 
-        newTask={newTask}
-        setNewTask={setNewTask}
-        addTask={addTask}
-        />
-        <ToastCard toastType={toastType} clearToast={() => setToastType('')}/>
-      </Container>
-    </TaskContext.Provider>
-
-  );
-  
-}
-
-
-
-// =====================================================
-// COMPONENT : AddTask
-// Responsible only for adding new tasks
-// =====================================================
-export function AddTask({ newTask, setNewTask, addTask }) {
-
-
-  // ---------------------------------------------------
-  // Custom styling for the TextField
-  // ---------------------------------------------------
-  const textStyle = {
-    '& .MuiOutlinedInput-root': {
-
-      '& fieldset': {
-        borderRadius: '1rem',
-        borderWidth: '0.1rem',
-        borderColor: 'grey.500',
-      },
-
-      '&:hover fieldset': {
-        borderWidth: '0.15rem',
-        borderColor: '#0080FE',
-      },
-
-      '&.Mui-focused fieldset': {
-        borderColor: '#0080FE',
-      },
-
-    }
-  };
-
-
-  return (
-
-    <Stack
+        <Stack
       direction="row"
       sx={{
         marginTop: '1rem',
@@ -264,53 +210,85 @@ export function AddTask({ newTask, setNewTask, addTask }) {
         justifyContent: 'space-between',
       }}
     >
-      <Stack direction="column" sx={{ width: '70%' ,  gap: '1rem' }}>
-
-      {/* Input field for new task */}
-      <TextField
-        value={newTask.title}
-        onChange={(e) => setNewTask({...newTask, title:e.target.value})}
-        label="New Task"
-        variant="outlined"
-        id="outlined-basic"
-        sx={{
-          ...textStyle,
-        }}
-      />
-      {/*Input field for task details */}
-      <TextField
-        value={newTask.details}
-        onChange={(e) => setNewTask({...newTask, details: e.target.value})}
-        label="Details"
-        variant="outlined"
-        id="outlined-basic-details"
-        sx={{
-          ...textStyle,
-        }}
-      />
-      </Stack>
-
-      {/* Button to add task */}
-      <Button
-        variant="outlined"
-        sx={{
-          fontSize: '0.9em',
-          padding: '0.3rem ',
-          width: '25%',
-          height: 'fit-content',
-          background: theme.palette.success.main,
-          '&:hover': {
-                            bgcolor: theme.palette.success.dark,
-                          },
-          color: theme.palette.success.contrastText,
-          borderRadius: '1rem'
-        }}
-        onClick={addTask}
-      >
-        ADD A TASK
-      </Button>
-
+      <Header />
+        <AddTaskCard addTask={addTask} />
     </Stack>
+        {/* Render all task cards */}
+        <SimpleSwiper slides = {taskCard}/>         
+        {/* Add Task Section */}
+        <ToastCard toastType={toastType} clearToast={() => setToastType('')}/>
+      </Container>
+    </TaskContext.Provider>
 
+  );
+  
+}
+
+//Simple Swiper Component
+function SimpleSwiper({slides}) {
+  const arrowBtnStyle = {
+    position: 'absolute',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    zIndex: '10',
+    cursor: 'pointer',
+    fontSize: '2rem',
+    color: '#000',
+    userSelect: 'none',
+  };
+  return (
+    <Swiper
+  direction="vertical"
+  slidesPerView={3}
+  spaceBetween={10}
+  mousewheel={true}
+  modules={[Navigation, Pagination, Mousewheel]}
+  pagination={{ clickable: true }}
+  navigation={{
+    nextEl: ".swiper-button-next-custom",
+    prevEl: ".swiper-button-prev-custom",
+  }}
+  style={{ marginTop:'1rem',padding:'5rem 2rem', height:'500px',position: "relative" }}
+>
+  {slides.map((slide, index) => (
+        <SwiperSlide key={index}>
+          {slide}
+        </SwiperSlide>
+      ))}
+
+  {/* Custom arrows */}
+  <IconButton
+                    className='swiper-button-prev-custom'
+                    aria-label="add new task"
+                    size="large"
+                    sx={{ ...arrowBtnStyle,
+                        top: 0,
+                        color: 'primary.main' ,
+                        backgroundColor: 'primary.light',
+                        '&:hover': {
+                            bgcolor: 'primary.dark',
+                          },
+
+                    }}
+                  >
+                    <ExpandLessIcon fontSize="large" />
+                  </IconButton>
+                  <IconButton
+                    className='swiper-button-next-custom'
+                    aria-label="add new task"
+                    size="large"
+                    sx={{ ...arrowBtnStyle,
+                        bottom: 0,
+                        color: 'primary.main' ,
+                        backgroundColor: 'primary.light',
+                        '&:hover': {
+                            bgcolor: 'primary.dark',
+                          },
+
+                    }}
+                  >
+                    <ExpandMoreIcon fontSize="large" />
+                  </IconButton>
+</Swiper>
   );
 }
