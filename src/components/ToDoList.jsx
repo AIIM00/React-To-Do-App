@@ -1,5 +1,5 @@
 // -----------------------------
-// Imports
+// COMPONENTS IMPORTS
 // -----------------------------
 import Container from '@mui/material/Container';
 import Header from './Header';
