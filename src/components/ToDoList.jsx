@@ -39,14 +39,21 @@ export default function ToDoList() {
   // State: list of tasks
   // Each task contains id, title, details, and status
   // ---------------------------------------------------
-  const [taskArr, dispatch] = useReducer(todosReducer, [], () => {
+  const [taskArr, dispatch] = useReducer(todosReducer, [])
+  // Load tasks once from localStorage
+  useEffect(() => {
+    console.log('Old tasks loaded');
     const storageTodos = JSON.parse(localStorage.getItem('todos'));
-    return storageTodos
-  });
-  useEffect(()=>{
-    localStorage.setItem('todos', JSON.stringify(taskArr));
-  },[taskArr])
+    if (storageTodos && storageTodos.length) {
+      dispatch({ type: 'init', payload: storageTodos });
+    }
+  }, []);
 
+  // Save tasks every time taskArr changes
+  useEffect(() => {
+    console.log('Refreshing...')
+    localStorage.setItem('todos', JSON.stringify(taskArr));
+  }, [taskArr]);
   // ---------------------------------------------------
   // State: type of toast notification to show (for future use with Snackbar)
   const [toastType, setToastType] = useState("");
@@ -91,7 +98,7 @@ export default function ToDoList() {
         payload: { id, title: newTitle }
       });
       break;
-}
+    }
 
     case 'delete': {
       const confirmDelete = window.confirm("Are you sure you want to delete this task?");

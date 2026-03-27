@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function reducer(currentTodos, action) {
   switch (action.type) {
+    case "init":
+      return action.payload; // load from localStorage
     case "add": {
       const newToDo = {
         id: uuidv4(),
