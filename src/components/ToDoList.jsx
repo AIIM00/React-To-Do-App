@@ -2,16 +2,16 @@
 // Imports
 // -----------------------------
 import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
 import Header from './Header';
 import ToDo from './ToDo';
 import ToastCard from './ToastCard';
 import AddTaskCard from './AddTaskCard';
 
 
+import { useState, useEffect, useReducer} from 'react';
 
-import { v4 as uuidv4 } from 'uuid';
-import { useState, useEffect} from 'react';
+//Use Reducer
+import todosReducer from '../reducers/todosReducer';
 
 //USE CONTEXT
 import { TaskContext } from "../contexts/TaskContext";
@@ -39,44 +39,13 @@ export default function ToDoList() {
   // State: list of tasks
   // Each task contains id, title, details, and status
   // ---------------------------------------------------
-  const [taskArr, setTasks] = useState(()=>{
+  const [taskArr, dispatch] = useReducer(todosReducer, [], () => {
     const storageTodos = JSON.parse(localStorage.getItem('todos'));
-    return storageTodos || [
-     {
-    id: uuidv4(),
-    title: "Finish React To-Do App",
-    details: "Complete filtering, editing, and UI improvements",
-    done: false
-  },
-  {
-    id: uuidv4(),
-    title: "Go to the Gym",
-    details: "Leg day workout and 20 minutes cardio",
-    done: true
-  },
-  {
-    id: uuidv4(),
-    title: "Study Networking",
-    details: "Review CCNA routing and NAT configuration",
-    done: false
-  },
-  {
-    id: uuidv4(),
-    title: "Push Project to GitHub",
-    details: "Update README and commit the latest changes",
-    done: true
-  },
-  {
-    id: uuidv4(),
-    title: "Buy Groceries",
-    details: "Milk, eggs, chicken, and vegetables",
-    done: false
-  }
-
-]});
-useEffect(()=>{
-  localStorage.setItem('todos', JSON.stringify(taskArr));
-},[taskArr])
+    return storageTodos
+  });
+  useEffect(()=>{
+    localStorage.setItem('todos', JSON.stringify(taskArr));
+  },[taskArr])
 
   // ---------------------------------------------------
   // State: type of toast notification to show (for future use with Snackbar)
@@ -88,13 +57,13 @@ useEffect(()=>{
 
   // ---------------------------------------------------
   const filteredTasks = taskArr.filter(task => {
-  if (filter === "done") return task.done;
-  if (filter === "undone") return !task.done;
-  return true; // all
-});
+    if (filter === "done") return task.done;
+    if (filter === "undone") return !task.done;
+    return true; // all
+  });
 
 
-// ---------------------------------------------------
+  // ---------------------------------------------------
 
 
   // ---------------------------------------------------
@@ -104,40 +73,39 @@ useEffect(()=>{
   const handleTaskAction = (id, action) => {
     switch (action) {
 
-      case 'done':
-        setToastType(action);
-        setTasks(taskArr.map(task =>
-          task.id === id ? { ...task, done: true } : task
+    case 'done':
+      setToastType(action);
+      dispatch({ type: 'done', payload: { id } });
+      break;
 
-        ));
-        
-        break;
-      case 'undo':
-        setToastType(action);
-        setTasks(taskArr.map(task =>
-          task.id === id ? { ...task, done: false } : task))
-        break;
-      case 'edit':
-        setToastType(action);
-        setTasks(taskArr.map(task =>
-          task.id === id? { ...task, title: prompt('Enter New Title', task.title)} : task
-        ));
-        break;
-      
-      case 'delete':{
-        const confirmDelete = window.confirm("Are you sure you want to delete this task?");
-        if (!confirmDelete) return;
-        else{
-          setToastType(action);
-          setTasks(taskArr.filter(task => task.id !== id));
-        }
-         break;
-      }
-       
+    case 'undo':
+      setToastType(action);
+      dispatch({ type: 'undo', payload: { id } });
+      break;
+    case 'edit': {
+      const newTitle = prompt("Enter new Title:");
+      if (!newTitle || !newTitle.trim()) return;
+      setToastType(action);
+      dispatch({
+        type: 'edit',
+        payload: { id, title: newTitle }
+      });
+      break;
+}
 
-      default:
-        break;
+    case 'delete': {
+      const confirmDelete = window.confirm("Are you sure you want to delete this task?");
+      if (!confirmDelete) break;
+
+      setToastType(action);
+      dispatch({ type: 'delete', payload: { id } });
+      break;
     }
+
+    default:
+      break;
+  }
+
   };
 
 
@@ -145,19 +113,16 @@ useEffect(()=>{
   // Adds a new task to the task list
   // Prevents adding empty tasks
   // ---------------------------------------------------
+  
   function addTask(task) {
+    
     if (!task.title.trim()) return;
-    const newToDo = {
-        id: uuidv4(),
+    
+       dispatch({type:'add',payload:{
         title: task.title,
         details: task.details,
-        done: false,
-      }
-    const updatedToDo = [
-      ...taskArr,newToDo
-      ,
-    ] 
-    setTasks(updatedToDo);
+       }})
+        
   }
 
 
